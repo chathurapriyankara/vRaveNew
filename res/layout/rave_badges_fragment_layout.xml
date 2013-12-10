@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/search_all_search_box_back"
+    android:orientation="vertical"
+    android:padding="5dp" >
+
+    <ScrollView
+        android:id="@+id/scrollView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:background="@drawable/search_all_search_box_back" >
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:stretchColumns="0,1,2" >
+
+            <TableRow
+                android:id="@+id/tableRow1"
+                android:layout_width="wrap_content"
+                android:layout_height="130dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="5dp" >
+
+                <ImageView
+                    android:id="@+id/badge1"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="15dp"
+                    android:src="@drawable/avenger" />
+
+                <ImageView
+                    android:id="@+id/badge2"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="15dp"
+                    android:src="@drawable/engizer" />
+
+                <ImageView
+                    android:id="@+id/badge3"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="15dp"
+                    android:src="@drawable/hulk" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow2"
+                android:layout_width="wrap_content"
+                android:layout_height="130dp"
+                android:layout_gravity="center" >
+
+                <ImageView
+                    android:id="@+id/badge4"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="15dp"
+                    android:src="@drawable/rave" />
+
+                <ImageView
+                    android:id="@+id/badge5"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="15dp"
+                    android:src="@drawable/rockstar" />
+
+                <ImageView
+                    android:id="@+id/badge6"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:padding="15dp"
+                    android:src="@drawable/vip" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow4"
+                android:layout_width="wrap_content"
+                android:layout_height="130dp"
+                android:layout_gravity="center" >
+
+                <ImageView
+                    android:id="@+id/badge10"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_column="0"
+                    android:padding="15dp"
+                    android:src="@drawable/wizardofbugs" />
+
+                <ImageView
+                    android:id="@+id/badge11"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_column="1"
+                    android:padding="15dp"
+                    android:src="@drawable/einstien" />
+
+                <ImageView
+                    android:id="@+id/badge11"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_column="2"
+                    android:padding="15dp"
+                    android:src="@drawable/coach" />
+            </TableRow>
+
+            <TableRow
+                android:id="@+id/tableRow4"
+                android:layout_width="wrap_content"
+                android:layout_height="130dp"
+                android:layout_gravity="center" >
+
+                <ImageView
+                    android:id="@+id/badge12"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_column="1"
+                    android:padding="15dp"
+                    android:src="@drawable/code_ninja" />
+            </TableRow>
+        </TableLayout>
+    </ScrollView>
+
+</LinearLayout>
