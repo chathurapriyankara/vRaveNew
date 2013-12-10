@@ -18,7 +18,8 @@
             android:layout_width="35dp"
             android:layout_height="35dp"
             android:layout_centerVertical="true"
-            android:src="@drawable/ic_launcher" />
+            android:src="@drawable/ic_launcher_white" 
+            android:layout_marginLeft="5dp"/>
 
         <TextView
             android:id="@+id/textView2"
