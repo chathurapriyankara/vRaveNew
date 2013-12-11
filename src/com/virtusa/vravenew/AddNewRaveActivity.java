@@ -39,18 +39,22 @@ public class AddNewRaveActivity extends Activity {
     static JSONArray returnData = null;
     HashMap<String, String> params;
     static final String SERVER_URL = "http://rdeshapriya.com/vnotifications/webService.php?action=vplussearch&data=";
-    
+    ProgressBar PbSendrave; 
+    ImageView sendNewRave; 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_new_rave);
+		sendNewRave = (ImageView) findViewById(R.id.imageView4);
+		PbSendrave = (ProgressBar) findViewById(R.id.progressBarSendRave);
 		
 		actvNameSuggesion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewNameSuggesion);
 		actvNameSuggesion.addTextChangedListener(new TextWatcher() {
 			
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				// TODO Auto-generated method stub
+				sendNewRave.setVisibility(View.GONE);
+				PbSendrave.setVisibility(View.VISIBLE);
 				
 			}
 			
@@ -77,10 +81,10 @@ public class AddNewRaveActivity extends Activity {
 			}
 		});
 		
-		final ProgressBar PbSendrave = (ProgressBar) findViewById(R.id.progressBarSendRave);
+		
 		PbSendrave.setVisibility(View.GONE);
 		
-		final ImageView sendNewRave = (ImageView) findViewById(R.id.imageView4);
+		
 		sendNewRave.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
@@ -135,6 +139,8 @@ public class AddNewRaveActivity extends Activity {
 		
 		 @Override
          protected void onPostExecute(String s) {
+			 sendNewRave.setVisibility(View.VISIBLE);
+				PbSendrave.setVisibility(View.GONE);
          	try{
                  // clear the array list if items exist
                  if (aList.size() > 0) {

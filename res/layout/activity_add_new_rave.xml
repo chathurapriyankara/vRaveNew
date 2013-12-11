@@ -76,11 +76,21 @@
         </AutoCompleteTextView>
 
         <EditText
-            android:id="@+id/editText1"
+            android:id="@+id/editTextRaveCategory"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
-            android:hint="Select a category" />
+            android:hint="Select a category" 
+            android:layout_marginTop="20dp"/>
+        
+           <EditText
+            android:id="@+id/editTextRaveMessage"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:ems="10"
+            android:hint="Select a category" 
+            android:layout_marginTop="20dp"
+            android:gravity="top"/>
     </LinearLayout>
 
 </LinearLayout>
