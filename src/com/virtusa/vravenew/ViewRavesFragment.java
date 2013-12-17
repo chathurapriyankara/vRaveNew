@@ -99,8 +99,7 @@ public class ViewRavesFragment extends Fragment {
 				 if (firstVisibleItem+visibleItemCount == totalItemCount &&taskReady && noNull ) {
 					 	taskReady = false;
 						SERVER_URL_NEW = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=djayasuriya&pageCount="+counter;
-						counter ++;
-						//new GetMoreRaveTask().execute();
+						new GetMoreRaveTask().execute();
 			        }
 				
 			}
@@ -116,6 +115,7 @@ public class ViewRavesFragment extends Fragment {
 		
 
 		protected void onPreExecute() {
+			
 			
 		}
 
@@ -270,7 +270,7 @@ public class ViewRavesFragment extends Fragment {
 			String rave_Send;
 			HttpClient client = new DefaultHttpClient();
 
-			HttpGet getRequest = new HttpGet(SERVER_URL);
+			HttpGet getRequest = new HttpGet(SERVER_URL_NEW);
 
 			try {
 				HttpResponse response = client.execute(getRequest);
@@ -286,7 +286,6 @@ public class ViewRavesFragment extends Fragment {
 				}
 
 				jsonData = builder.toString();
-				
 				if(jsonData.equals("[]")){
 					noNull = false;
 				}
@@ -294,7 +293,7 @@ public class ViewRavesFragment extends Fragment {
 				else{
 
 				jDataArray = new JSONArray(jsonData);
-				//Log.d("JSONARRAY", jDataArray.toString());
+				
 				int arrayLength = jDataArray.length();
 				raveList.clear();
 				for (int i = 0; i < arrayLength; i++) {
@@ -395,6 +394,7 @@ public class ViewRavesFragment extends Fragment {
 			}
 				adapter.notifyDataSetChanged();
 				taskReady = true;
+				counter ++;
 			}
 		}
 	}

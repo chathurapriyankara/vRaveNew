@@ -10,15 +10,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TabHost;
 
 public class VRaveMainActivity extends FragmentActivity {
-
+	ProgressBar pbLoadRaves;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_vrave_main);
-		
+		pro(false);
 		final TabHost tabs= (TabHost) findViewById(R.id.tabhost);
 		tabs.setup();
 		
@@ -34,7 +35,7 @@ public class VRaveMainActivity extends FragmentActivity {
 		
 		final ImageView ivAddNewRave = (ImageView) findViewById(R.id.imageView4);
 		ivAddNewRave.setOnTouchListener(new OnTouchListener() {
-			
+			 
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				int clickEvent = event.getAction();
@@ -59,6 +60,17 @@ public class VRaveMainActivity extends FragmentActivity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.vrave_main, menu);
 		return true;
+	}
+	
+	public  void pro(boolean show){
+		pbLoadRaves = (ProgressBar) findViewById(R.id.progressBar1);
+		if(show){
+			pbLoadRaves.setVisibility(View.VISIBLE);
+		}
+		
+		else{
+			pbLoadRaves.setVisibility(View.GONE);
+		}
 	}
 
 }
