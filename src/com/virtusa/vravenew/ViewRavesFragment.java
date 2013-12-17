@@ -45,16 +45,18 @@ public class ViewRavesFragment extends Fragment {
 	        public void onItemClick(AdapterView<?> adapter, View view,
 	                int position, long id) {
 	        	  
-                TextView rTitle = (TextView)view.findViewById(R.id.ravetitle);
+               // TextView rTitle = (TextView)view.findViewById(R.id.ravetitle);
                 TextView rmessage = (TextView)view.findViewById(R.id.raveexplanation);
-                TextView rsender = (TextView)view.findViewById(R.id.raveperson);
+              //  TextView rsender = (TextView)view.findViewById(R.id.raveperson);
                 
-                String ravet = rTitle.getText().toString();
-                String ravem = rmessage.getText().toString();
-                String sender = rsender.getText().toString();
-                
+              
                
-                
+                if(rmessage.getLineCount()==1){
+                	rmessage.setSingleLine(false);
+                }
+                else{
+                	rmessage.setSingleLine(true);
+                }
             //    initiatePopupWindow(ravet,ravem,sender);
 	        }
 	    });		
@@ -124,109 +126,6 @@ public class ViewRavesFragment extends Fragment {
 		l.setAdapter(adapter); 
 	}
 	
-//	
-//    //popup window method
-//    private PopupWindow pwindo;
-//    //person name
-//    private String ravePerson;
-//    public void initiatePopupWindow(String type, String des, String name) {
-//
-//            try {
-//                     //layout_MainMenu.getForeground().setAlpha(50);
-//            
-//                    ravePerson = name;
-//                    // We need to get the instance of the LayoutInflater
-//                    LayoutInflater inflater = (LayoutInflater) getActivity()
-//                                    .getSystemService(getActivity().LAYOUT_INFLATER_SERVICE);
-//                    View layout = inflater.inflate(R.layout.popup_screen, (ViewGroup)
-//
-//                    getActivity().findViewById(R.id.popup));
-//                    
-//    
-//                    
-//                    pwindo = new PopupWindow(layout, ViewGroup.LayoutParams.MATCH_PARENT,
-//                                    ViewGroup.LayoutParams.MATCH_PARENT, true);
-//                    pwindo.showAtLocation(layout, Gravity.CENTER_VERTICAL, 0, 0);
-//                    
-//                    
-//                    
-//                    //ravetype
-//                    TextView rave_type = (TextView) layout.findViewById(R.id.ravetype);
-//                    rave_type.setText(type);
-//                    
-//                    // rave description
-//                    TextView rave_dec = (TextView) layout.findViewById(R.id.ravedes);
-//                    rave_dec.setText(des);
-//
-//                    // rave person
-//                    TextView rave_person = (TextView) layout
-//                                    .findViewById(R.id.raveperson);
-//                    rave_person.setText(name);
-//
-//                    //send thank you response
-//                    
-//                    ImageView sendThank = (ImageView) layout.findViewById(R.id.send_thank);
-//                    sendThank.setOnClickListener(thank);
-//
-//                  
-//                    LinearLayout l = (LinearLayout) layout.findViewById(R.id.outer_layout);
-//            l.setOnClickListener(new OnClickListener() {
-//                            
-//                            @Override
-//                            public void onClick(View v) {
-//                                    pwindo.dismiss();
-//                                    
-//                            }
-//                    });
-//            LinearLayout l1 = (LinearLayout) layout.findViewById(R.id.popup);
-//            l1.setOnClickListener(new OnClickListener() {
-//                    
-//                    @Override
-//                    public void onClick(View v) {
-//                            
-//                    }
-//            });
-//
-//            } catch (Exception e) {
-//                    e.printStackTrace();
-//            }
-//    }
-//    
-//    //send thank you message method
-//    private OnClickListener thank = new OnClickListener() {
-//            public void onClick(View v) {
-//                    pwindo.dismiss();
-//                    AlertDialog.Builder altDialog = new AlertDialog.Builder(
-//                                    getActivity());
-//                    altDialog.setTitle("Confirm");
-//                    StringBuilder message = new StringBuilder();
-//                    message.append("Are you sure you want to thank ");
-//                    message.append(ravePerson);
-//                    message.append(" for raving you.");
-//                    altDialog.setMessage(message);
-//
-//                    altDialog.setPositiveButton("Yes",
-//                                    new DialogInterface.OnClickListener() {
-//                                            public void onClick(DialogInterface dialog, int id) {
-//                                                    // if this button is clicked, close
-//                                                    // current activity
-//                                                    
-//
-//                                            }
-//
-//                                    });
-//                    altDialog.setNegativeButton("No", new DialogInterface.OnClickListener() {
-//                            public void onClick(DialogInterface dialog, int id) {
-//                                    // if this button is clicked, close
-//                                    // current activity
-//                                    
-//
-//                            }
-//
-//                    });
-//                    altDialog.show();
-//
-//            }
-//    };
+
 
 }
