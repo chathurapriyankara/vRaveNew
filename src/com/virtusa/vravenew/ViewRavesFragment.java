@@ -1,131 +1,401 @@
 package com.virtusa.vravenew;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.json.JSONArray;
+import org.json.JSONException;
+
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.PopupWindow;
+import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 public class ViewRavesFragment extends Fragment {
 	
-	List<HashMap<String, String>> raveList = new ArrayList<HashMap<String, String>>();
+	ArrayList<Integer> categoryImage = new ArrayList<Integer>();
+	ArrayList<String> raveTitle = new ArrayList<String>();
+	ArrayList<String> raveMessage = new ArrayList<String>();
+	ArrayList<String> raveSender = new ArrayList<String>();
+	
+	HashMap<String, String> params;
 	// keys for hash set
-    String[] from = {"rImg", "rTitle", "rMessage", "rSender" };
-    // ui elements in the search suggesions
-    int[] to = { R.id.imageViewRaveImage,R.id.ravetitle,  R.id.raveexplanation, R.id.raveperson };
-    ListView l;
+	String[] from = { "cImg","rTitle", "rMessage", "rSender" };
+	// ui elements in the search suggesions
+	int[] to = { R.id.imageViewRaveImage,R.id.ravetitle, R.id.raveexplanation, R.id.raveperson };
+
+	// array list use in the adaper
+	List<HashMap<String, String>> raveList = new ArrayList<HashMap<String, String>>();
+
+	// json array use to buils the result
+	static JSONArray jDataArray = null;
+	SimpleAdapter adapter;
+
+	ListView lvRaveList;
+	String SERVER_URL;
+	String SERVER_URL_NEW;
+	int counter = 1;
+	public boolean taskReady = false;
+	public boolean scrollEnd = false;
+	boolean noNull = true;
+	ProgressBar pbLoadRaves;
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState){
 		View view;
 		view = inflater.inflate(R.layout.view_raves_fragment_layout, container,false);
-		 l = (ListView) view.findViewById(R.id.listView1);
-		//String[] from = {"Good job","Awesome code","Nice help","Nice thinking","Great help","Good job","Awesome code","Nice help","Nice thinking","Great help","Good job","Awesome code","Nice help","Nice thinking","Great help"};
-		
-		populateRaveList();
-		
-		
-		
-		l.setOnItemClickListener(new OnItemClickListener() {
+		 lvRaveList = (ListView) view.findViewById(R.id.listView1);
+		 SERVER_URL = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=djayasuriya&pageCount=0";
+		 new ViewRaveTask().execute();
+		 
+		lvRaveList.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> adapter, View view,
 	                int position, long id) {
 	        	  
-               // TextView rTitle = (TextView)view.findViewById(R.id.ravetitle);
-                TextView rmessage = (TextView)view.findViewById(R.id.raveexplanation);
-              //  TextView rsender = (TextView)view.findViewById(R.id.raveperson);
-                
-              
-               
+                TextView rmessage = (TextView) view.findViewById(R.id.raveexplanation);
                 if(rmessage.getLineCount()==1){
                 	rmessage.setSingleLine(false);
                 }
                 else{
                 	rmessage.setSingleLine(true);
                 }
-            //    initiatePopupWindow(ravet,ravem,sender);
 	        }
-	    });		
+	    });	
+		
+		
+		lvRaveList.setOnScrollListener(new OnScrollListener() {
+			
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				if(scrollState==0){
+					taskReady = true;
+				}
+				
+			}
+			
+			@Override
+			public void onScroll(AbsListView view, int firstVisibleItem,
+					int visibleItemCount, int totalItemCount) {
+				 if (firstVisibleItem+visibleItemCount == totalItemCount &&taskReady && noNull ) {
+					 	taskReady = false;
+						SERVER_URL_NEW = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=djayasuriya&pageCount="+counter;
+						counter ++;
+						//new GetMoreRaveTask().execute();
+			        }
+				
+			}
+		});
 		
 		return view;
 	}
 	
 	
-	
-	public void populateRaveList(){
+	private class ViewRaveTask extends AsyncTask<String, Void, Void> {
+
+		String jsonData;
 		
-		int imgGreatAdvice  = R.drawable.great_advice;
-		int imgEagleEye  = R.drawable.eagle_eye;
-		int imgGreatIdea  = R.drawable.great_idea;
-		int imgGreatWork  = R.drawable.great_work;
-		int imgKillerCode  = R.drawable.killer_code;
-		int imgOldRavesDefault  = R.drawable.old_raves_default;
-		int imgPirl  = R.drawable.pirl;
-		int imgSuperService  = R.drawable.super_service;
-		int imgThanksForYourHelp  = R.drawable.thanks_for_your_help;
-		
-		HashMap<String, String> rave1 = new HashMap<String, String>();
-		rave1.put("rImg", Integer.toString(imgGreatAdvice));
-        rave1.put("rTitle", "Good Job");
-        rave1.put("rMessage", "Appreciate your hard work given for the project");
-        rave1.put("rSender", "Chathura Priyankara");
-        
-        raveList.add(rave1);
-        
-        HashMap<String, String> rave2 = new HashMap<String, String>();
-        rave2.put("rImg", Integer.toString(imgKillerCode));
-        rave2.put("rTitle", "Awesome  code");
-        rave2.put("rMessage", "That code worked like magic. Thank you very much");
-        rave2.put("rSender", "Dhanushka Jayasuriya");
-        raveList.add(rave2);
-        
-        
-        HashMap<String, String> rave3 = new HashMap<String, String>();
-        rave3.put("rImg", Integer.toString(imgThanksForYourHelp));
-        rave3.put("rTitle", "Great Help");
-        rave3.put("rMessage", "Thanks heaps for helping out hrough out the project work.");
-        rave3.put("rSender", "Madushi Dias");
-        raveList.add(rave3);
-        
-        HashMap<String, String> rave4 = new HashMap<String, String>();
-        rave4.put("rImg", Integer.toString(imgGreatIdea));
-        rave4.put("rTitle", "Nice Thinking");
-        rave4.put("rMessage", "Good thinking saved our neck");
-        rave4.put("rSender", "Prasan Yapa");
-        raveList.add(rave4);
-        
-        HashMap<String, String> rave5 = new HashMap<String, String>();
-        rave5.put("rImg", Integer.toString(imgGreatWork));
-        rave5.put("rTitle", "Good Job");
-        rave5.put("rMessage", "Appreciate your hard work given for the project");
-        rave5.put("rSender", "Dhanushka Jayasuriya");
-        raveList.add(rave5);
-        
-        HashMap<String, String> rave6 = new HashMap<String, String>();
-        rave6.put("rImg", Integer.toString(imgKillerCode));
-        rave6.put("rTitle", "Awesome code");
-        rave6.put("rMessage", "That code worked like magic. Thank you very much");
-        rave6.put("rSender", "Dhanushka Jayasuriya");
-        raveList.add(rave6);
-        
-        SimpleAdapter adapter = new SimpleAdapter(getActivity(),raveList,R.layout.list_item_view_rave, from,to);
-		l.setAdapter(adapter); 
+
+		protected void onPreExecute() {
+			
+		}
+
+		@Override
+		protected Void doInBackground(String... params) {
+			String rave_KeywordId;
+			String rave_Tit;
+			String rave_Mes;
+			String rave_Send;
+			HttpClient client = new DefaultHttpClient();
+
+			HttpGet getRequest = new HttpGet(SERVER_URL);
+
+			try {
+				HttpResponse response = client.execute(getRequest);
+
+				InputStream jsonStream = response.getEntity().getContent();
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(jsonStream));
+				StringBuilder builder = new StringBuilder();
+
+				String line;
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+				}
+
+				jsonData = builder.toString();
+
+				jDataArray = new JSONArray(jsonData);
+				//Log.d("JSONARRAY", jDataArray.toString());
+				int arrayLength = jDataArray.length();
+				for (int i = 0; i < arrayLength; i++) {
+
+					rave_KeywordId = jDataArray.getJSONObject(i)
+							.getJSONObject("Keyword").getString("KeywordId");
+					
+					rave_Tit = jDataArray.getJSONObject(i)
+							.getJSONObject("Keyword").getString("Tagline");
+
+					rave_Mes = jDataArray.getJSONObject(i).getString(
+							"RaveText");
+
+					rave_Send = jDataArray.getJSONObject(i)
+							.getJSONObject("Sender").getString("FullName");
+
+
+					//keywordId.add(rave_KeywordId);
+					if(rave_KeywordId.equals("1")){
+						categoryImage.add(R.drawable.pirl);
+					}
+					
+					else if(rave_KeywordId.equals("2")){
+						categoryImage.add(R.drawable.killer_code);
+					}
+					
+					else if (rave_KeywordId.equals("3")) {
+						categoryImage.add(R.drawable.eagle_eye);
+					}
+					
+					else if (rave_KeywordId.equals("4")) {
+						categoryImage.add(R.drawable.great_work);
+					}
+					
+					else if (rave_KeywordId.equals("5")) {
+						categoryImage.add(R.drawable.great_advice);
+					}
+					
+					else if (rave_KeywordId.equals("6")) {
+						categoryImage.add(R.drawable.great_idea);
+					}
+					
+					else if (rave_KeywordId.equals("7")) {
+						categoryImage.add(R.drawable.thanks_for_your_help);
+					}
+					
+					else if (rave_KeywordId.equals("8")) {
+						categoryImage.add(R.drawable.super_service);
+					}
+					
+					else if (rave_KeywordId.equals("9")) {
+						categoryImage.add(R.drawable.old_raves_default);
+					}
+					
+					
+					else{
+						categoryImage.add(R.drawable.old_raves_default);
+					}
+					
+					raveTitle.add(rave_Tit);
+					raveMessage.add(rave_Mes);
+					raveSender.add(rave_Send);
+
+				}
+
+			} catch (ClientProtocolException e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("error", e.toString());
+
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("error", e.toString());
+
+			}
+			return null;
+		}
+
+		protected void onPostExecute(Void result) {
+
+			
+
+			int length = raveTitle.size();
+			for (int i = 0; i < length; i++) {
+				HashMap<String, String> rave = new HashMap<String, String>();
+				rave.put("cImg", Integer.toString(categoryImage.get(i)));
+				rave.put("rTitle", raveTitle.get(i));
+				rave.put("rMessage", raveMessage.get(i));
+				rave.put("rSender", raveSender.get(i));
+				raveList.add(rave);
+				
+				
+			}
+			adapter = new SimpleAdapter(getActivity(), raveList,
+					R.layout.list_item_view_rave, from, to);
+			lvRaveList.setAdapter(adapter);
+
+		}
 	}
 	
+	
+	
+	
+	private class GetMoreRaveTask extends AsyncTask<String, Void, Void> {
+
+		String jsonData;
+		
+
+		protected void onPreExecute() {
+			
+		}
+
+		@Override
+		protected Void doInBackground(String... params) {
+			String rave_KeywordId;
+			String rave_Tit;
+			String rave_Mes;
+			String rave_Send;
+			HttpClient client = new DefaultHttpClient();
+
+			HttpGet getRequest = new HttpGet(SERVER_URL);
+
+			try {
+				HttpResponse response = client.execute(getRequest);
+
+				InputStream jsonStream = response.getEntity().getContent();
+				BufferedReader reader = new BufferedReader(
+						new InputStreamReader(jsonStream));
+				StringBuilder builder = new StringBuilder();
+
+				String line;
+				while ((line = reader.readLine()) != null) {
+					builder.append(line);
+				}
+
+				jsonData = builder.toString();
+				
+				if(jsonData.equals("[]")){
+					noNull = false;
+				}
+				
+				else{
+
+				jDataArray = new JSONArray(jsonData);
+				//Log.d("JSONARRAY", jDataArray.toString());
+				int arrayLength = jDataArray.length();
+				raveList.clear();
+				for (int i = 0; i < arrayLength; i++) {
+
+					rave_KeywordId = jDataArray.getJSONObject(i)
+							.getJSONObject("Keyword").getString("KeywordId");
+					
+					rave_Tit = jDataArray.getJSONObject(i)
+							.getJSONObject("Keyword").getString("Tagline");
+
+					rave_Mes = jDataArray.getJSONObject(i).getString(
+							"RaveText");
+
+					rave_Send = jDataArray.getJSONObject(i)
+							.getJSONObject("Sender").getString("FullName");
 
 
+					if(rave_KeywordId.equals("1")){
+						categoryImage.add(R.drawable.pirl);
+					}
+					
+					else if(rave_KeywordId.equals("2")){
+						categoryImage.add(R.drawable.killer_code);
+					}
+					
+					else if (rave_KeywordId.equals("3")) {
+						categoryImage.add(R.drawable.eagle_eye);
+					}
+					
+					else if (rave_KeywordId.equals("4")) {
+						categoryImage.add(R.drawable.great_work);
+					}
+					
+					else if (rave_KeywordId.equals("5")) {
+						categoryImage.add(R.drawable.great_advice);
+					}
+					
+					else if (rave_KeywordId.equals("6")) {
+						categoryImage.add(R.drawable.great_idea);
+					}
+					
+					else if (rave_KeywordId.equals("7")) {
+						categoryImage.add(R.drawable.thanks_for_your_help);
+					}
+					
+					else if (rave_KeywordId.equals("8")) {
+						categoryImage.add(R.drawable.super_service);
+					}
+					
+					else if (rave_KeywordId.equals("9")) {
+						categoryImage.add(R.drawable.old_raves_default);
+					}
+					
+					
+					else{
+						categoryImage.add(R.drawable.old_raves_default);
+					}
+					
+					raveTitle.add(rave_Tit);
+					raveMessage.add(rave_Mes);
+					raveSender.add(rave_Send);
+
+				}
+				}
+
+			} catch (ClientProtocolException e) {
+
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("error", e.toString());
+
+			} catch (JSONException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				Log.e("error", e.toString());
+
+			}
+			return null;
+		}
+
+		protected void onPostExecute(Void result) {
+
+			if(noNull==true){
+
+			int length = raveTitle.size();
+			for (int i = 0; i < length; i++) {
+				HashMap<String, String> rave = new HashMap<String, String>();
+				rave.put("cImg", Integer.toString(categoryImage.get(i)));
+				rave.put("rTitle", raveTitle.get(i));
+				rave.put("rMessage", raveMessage.get(i));
+				rave.put("rSender", raveSender.get(i));
+				raveList.add(rave);
+				
+				
+			}
+				adapter.notifyDataSetChanged();
+				taskReady = true;
+			}
+		}
+	}
 }

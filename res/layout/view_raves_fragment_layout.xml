@@ -8,7 +8,7 @@
     <ListView
         android:id="@+id/listView1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginLeft="5dip"
         android:layout_marginRight="5dip"
         android:layout_marginTop="3dip"
@@ -17,5 +17,6 @@
         android:dividerHeight="2dp"
         android:scrollbars="none" >
     </ListView>
+
 
 </LinearLayout>
