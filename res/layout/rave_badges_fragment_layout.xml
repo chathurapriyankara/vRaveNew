@@ -82,7 +82,7 @@
                 android:layout_gravity="center" >
 
                 <ImageView
-                    android:id="@+id/badge10"
+                    android:id="@+id/badge7"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_column="0"
@@ -90,7 +90,7 @@
                     android:src="@drawable/wizardofbugs" />
 
                 <ImageView
-                    android:id="@+id/badge11"
+                    android:id="@+id/badge8"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_column="1"
@@ -98,7 +98,7 @@
                     android:src="@drawable/einstien" />
 
                 <ImageView
-                    android:id="@+id/badge11"
+                    android:id="@+id/badge9"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_column="2"
@@ -113,7 +113,7 @@
                 android:layout_gravity="center" >
 
                 <ImageView
-                    android:id="@+id/badge12"
+                    android:id="@+id/badge10"
                     android:layout_width="100dp"
                     android:layout_height="100dp"
                     android:layout_column="1"
