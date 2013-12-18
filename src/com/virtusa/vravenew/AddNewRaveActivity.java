@@ -17,25 +17,33 @@ import org.json.JSONObject;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class AddNewRaveActivity extends Activity {
 	private AutoCompleteTextView actvNameSuggesion;
@@ -46,8 +54,6 @@ public class AddNewRaveActivity extends Activity {
 	static JSONArray returnData = null;
 	HashMap<String, String> params;
 	static final String SERVER_URL = "http://rdeshapriya.com/vnotifications/webService.php?action=vplussearch&data=";
-	ProgressBar PbSendrave;
-	ImageView sendNewRave;
 
 	String[] category = { "You are a role model",
 			"Awesome code", "Sharp testing", "Good job",
@@ -61,10 +67,13 @@ public class AddNewRaveActivity extends Activity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_add_new_rave);
-		sendNewRave = (ImageView) findViewById(R.id.imageView4);
-		PbSendrave = (ProgressBar) findViewById(R.id.progressBarSendRave);
+		setProgressBarIndeterminate(true);
+		setProgressBarIndeterminateVisibility(false);
+		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
+		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
 		EditText e = (EditText)findViewById(R.id.editTextselectcategory);
 
@@ -74,8 +83,6 @@ public class AddNewRaveActivity extends Activity {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
-				sendNewRave.setVisibility(View.GONE);
-				PbSendrave.setVisibility(View.VISIBLE);
 
 			}
 
@@ -102,21 +109,20 @@ public class AddNewRaveActivity extends Activity {
 			}
 		});
 
-		PbSendrave.setVisibility(View.GONE);
 
-		sendNewRave.setOnTouchListener(new OnTouchListener() {
-
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					sendNewRave.setVisibility(View.GONE);
-					PbSendrave.setVisibility(View.VISIBLE);
-				}
-
-				return false;
-			}
-		});
+//		sendNewRave.setOnTouchListener(new OnTouchListener() {
+//
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//
+//				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//					sendNewRave.setVisibility(View.GONE);
+//					PbSendrave.setVisibility(View.VISIBLE);
+//				}
+//
+//				return false;
+//			}
+//		});
 
 		final Spinner mySpinner = (Spinner) findViewById(R.id.category);
 		mySpinner.setAdapter(new MyAdapter(this, R.layout.spinner_categories,
@@ -132,19 +138,50 @@ public class AddNewRaveActivity extends Activity {
 		});
 		
 	}
+	
+	 private boolean isNetworkAvailable() {
+         ConnectivityManager connectivityManager = (ConnectivityManager) this
+                         .getSystemService(Context.CONNECTIVITY_SERVICE);
+         NetworkInfo activeNetworkInfo = connectivityManager
+                         .getActiveNetworkInfo();
+         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	 }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.add_new_rave, menu);
-		return true;
+		MenuInflater inflater = getMenuInflater();
+	    inflater.inflate(R.menu.add_new_rave, menu);
+	    return super.onCreateOptionsMenu(menu);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+	    // Handle presses on the action bar items
+	    switch (item.getItemId()) {
+	        case R.id.action_settings:
+	            return true;
+	        case R.id.action_send_rave:
+	        	setProgressBarIndeterminateVisibility(true);
+	            return true;
+	        case android.R.id.home:
+	            NavUtils.navigateUpFromSameTask(this);
+	            return true;
+	        default:
+	            return super.onOptionsItemSelected(item);
+	    }
 	}
 
 	private class RaveNameSuggesionTask extends
 			AsyncTask<HashMap<String, String>, String, String> {
 		JSONArray jArray;
 		SimpleAdapter adapter;
-
+		
+		@Override
+		protected void onPreExecute() {
+			setProgressBarIndeterminateVisibility(true);
+		}
+		
 		@Override
 		protected String doInBackground(HashMap<String, String>... key) {
 			try {
@@ -163,7 +200,7 @@ public class AddNewRaveActivity extends Activity {
 				}
 
 			} catch (Exception e) {
-				Log.w("Error", e.getMessage());
+				
 			}
 
 			return null;
@@ -171,8 +208,7 @@ public class AddNewRaveActivity extends Activity {
 
 		@Override
 		protected void onPostExecute(String s) {
-			sendNewRave.setVisibility(View.VISIBLE);
-			PbSendrave.setVisibility(View.GONE);
+			setProgressBarIndeterminateVisibility(false);
 			try {
 				// clear the array list if items exist
 				if (aList.size() > 0) {
@@ -197,6 +233,8 @@ public class AddNewRaveActivity extends Activity {
 		}
 
 	}
+	
+
 
 	public static JSONArray postRequestWithData(String action,
 			HashMap<String, String> params) throws JSONException {

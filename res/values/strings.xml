@@ -6,7 +6,7 @@
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="title_activity_vrave_main">VRaveMainActivity</string>
-    <string name="title_activity_add_new_rave">AddNewRaveActivity</string>
+    <string name="title_activity_add_new_rave">vRave</string>
     <string name="spinner">Choose a category</string>
 
 </resources>

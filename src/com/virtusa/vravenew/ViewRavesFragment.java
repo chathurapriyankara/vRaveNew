@@ -16,6 +16,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import android.app.ActionBar.LayoutParams;
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -57,15 +61,18 @@ public class ViewRavesFragment extends Fragment {
 	String SERVER_URL_NEW;
 	int counter = 1;
 	public boolean taskReady = false;
-	public boolean scrollEnd = false;
 	boolean noNull = true;
 	ProgressBar pbLoadRaves;
 	@Override
 	public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState){
 		View view;
 		view = inflater.inflate(R.layout.view_raves_fragment_layout, container,false);
-		 lvRaveList = (ListView) view.findViewById(R.id.listView1);
-		 SERVER_URL = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=djayasuriya&pageCount=0";
+		
+		pbLoadRaves = (ProgressBar) view.findViewById(R.id.progressBar1);
+		pbLoadRaves.setVisibility(View.GONE);
+		
+		lvRaveList = (ListView) view.findViewById(R.id.listView1);
+		 SERVER_URL = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=ckdesilva&pageCount=0";
 		 new ViewRaveTask().execute();
 		 
 		lvRaveList.setOnItemClickListener(new OnItemClickListener() {
@@ -75,9 +82,22 @@ public class ViewRavesFragment extends Fragment {
                 TextView rmessage = (TextView) view.findViewById(R.id.raveexplanation);
                 if(rmessage.getLineCount()==1){
                 	rmessage.setSingleLine(false);
+                	Log.d("HEIGHT",Integer.toString(rmessage.getHeight()));
+                	int s = rmessage.getText().length();
+                	if(s > 36){
+                	int d = Math.round(s/36) +1 ;
+                	int height = d * 30;
+                	view.getLayoutParams().height = height+85;
+                	view.requestLayout();
+					view.invalidate();
+                	}
+					
                 }
                 else{
                 	rmessage.setSingleLine(true);
+                	view.getLayoutParams().height = 100;
+					view.requestLayout();
+					view.invalidate();
                 }
 	        }
 	    });	
@@ -98,12 +118,12 @@ public class ViewRavesFragment extends Fragment {
 					int visibleItemCount, int totalItemCount) {
 				 if (firstVisibleItem+visibleItemCount == totalItemCount &&taskReady && noNull ) {
 					 	taskReady = false;
-						SERVER_URL_NEW = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=djayasuriya&pageCount="+counter;
+						SERVER_URL_NEW = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=ckdesilva&pageCount="+counter;
 						new GetMoreRaveTask().execute();
 			        }
-				
 			}
 		});
+		
 		
 		return view;
 	}
@@ -113,10 +133,9 @@ public class ViewRavesFragment extends Fragment {
 
 		String jsonData;
 		
-
+		@Override
 		protected void onPreExecute() {
-			
-			
+			pbLoadRaves.setVisibility(View.VISIBLE);
 		}
 
 		@Override
@@ -245,6 +264,7 @@ public class ViewRavesFragment extends Fragment {
 			}
 			adapter = new SimpleAdapter(getActivity(), raveList,
 					R.layout.list_item_view_rave, from, to);
+			pbLoadRaves.setVisibility(View.GONE);
 			lvRaveList.setAdapter(adapter);
 
 		}
@@ -259,7 +279,7 @@ public class ViewRavesFragment extends Fragment {
 		
 
 		protected void onPreExecute() {
-			
+			pbLoadRaves.setVisibility(View.VISIBLE);
 		}
 
 		@Override
@@ -378,7 +398,7 @@ public class ViewRavesFragment extends Fragment {
 		}
 
 		protected void onPostExecute(Void result) {
-
+			pbLoadRaves.setVisibility(View.GONE);
 			if(noNull==true){
 
 			int length = raveTitle.size();
@@ -389,8 +409,6 @@ public class ViewRavesFragment extends Fragment {
 				rave.put("rMessage", raveMessage.get(i));
 				rave.put("rSender", raveSender.get(i));
 				raveList.add(rave);
-				
-				
 			}
 				adapter.notifyDataSetChanged();
 				taskReady = true;
@@ -398,4 +416,12 @@ public class ViewRavesFragment extends Fragment {
 			}
 		}
 	}
+	
+	 private boolean isNetworkAvailable() {
+         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity()
+                         .getSystemService(Context.CONNECTIVITY_SERVICE);
+         NetworkInfo activeNetworkInfo = connectivityManager
+                         .getActiveNetworkInfo();
+         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	 }
 }
