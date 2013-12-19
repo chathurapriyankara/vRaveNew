@@ -82,10 +82,10 @@ public class ViewRavesFragment extends Fragment {
                 TextView rmessage = (TextView) view.findViewById(R.id.raveexplanation);
                 if(rmessage.getLineCount()==1){
                 	rmessage.setSingleLine(false);
-                	int s = rmessage.getText().length();
-                	if(s > 36){
-                	int d = Math.round(s/36) +1 ;
-                	int height = d * 30;
+                	int textLength = rmessage.getText().length();
+                	if(textLength > 36){
+                	int lineCount = Math.round(textLength/36) +1 ;
+                	int height = lineCount * 30;
                 	view.getLayoutParams().height = height+85;
                 	view.requestLayout();
 					view.invalidate();
