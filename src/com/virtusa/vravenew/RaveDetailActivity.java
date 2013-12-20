@@ -1,5 +1,6 @@
 package com.virtusa.vravenew;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,12 +18,13 @@ public class RaveDetailActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_rave_detail);
+		ActionBar actionBar = getActionBar();
+		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		actionBar.setTitle("View Raves");
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		//actionBar.setTitle("RA\u2764E");
 		
-		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle("View Raves");
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setTitle("RA\u2764E");
 		Intent myIntent= getIntent(); // gets the previously created intent
 		String raveTitle = myIntent.getStringExtra("rave_title");
 		String raveMsg = myIntent.getStringExtra("rave_msg"); 
@@ -74,15 +76,20 @@ public class RaveDetailActivity extends Activity {
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-	    // Handle presses on the action bar items
-	    switch (item.getItemId()) {
-	        case android.R.id.home:
-	        	finish();
-	           // NavUtils.navigateUpFromSameTask(this);
-	            return true;
-	        default:
-	            return super.onOptionsItemSelected(item);
-	    }
+		// Handle presses on the action bar items
+		switch (item.getItemId()) {
+		case R.id.action_settings:
+			Intent settingsIntent = new Intent(RaveDetailActivity.this,
+					SettingsActivity.class);
+			startActivity(settingsIntent);
+			return true;
+		case android.R.id.home:
+			finish();
+			// NavUtils.navigateUpFromSameTask(this);
+			return true;
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 }

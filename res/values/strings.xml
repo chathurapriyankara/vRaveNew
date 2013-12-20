@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">vRaveNew</string>
+    <string name="app_name">RA\u2764E</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_login">LoginActivity</string>
@@ -9,5 +9,6 @@
     <string name="title_activity_add_new_rave">vRave</string>
     <string name="spinner">Choose a category</string>
     <string name="title_activity_rave_description">RaveDescriptionActivity</string>
+    <string name="title_activity_settings">SettingsActivity</string>
 
 </resources>
