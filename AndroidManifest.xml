@@ -7,8 +7,9 @@
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="18" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -29,25 +30,36 @@
         <activity
             android:name="com.virtusa.vravenew.LoginActivity"
             android:label="@string/title_activity_login"
-            android:screenOrientation="portrait" 
-            android:theme="@style/NoActionBar">
+            android:screenOrientation="portrait"
+            android:theme="@style/NoActionBar" >
         </activity>
         <activity
             android:name="com.virtusa.vravenew.VRaveMainActivity"
             android:label="@string/title_activity_vrave_main"
             android:screenOrientation="portrait"
-            android:theme="@style/NoActionBar">
+            android:theme="@style/NoActionBar" >
         </activity>
         <activity
             android:name="com.virtusa.vravenew.AddNewRaveActivity"
-            android:label="@string/title_activity_add_new_rave"
-            android:screenOrientation="portrait" 
             android:icon="@drawable/ic_launcher_white"
-            android:parentActivityName="com.virtusa.vravenew.VRaveMainActivity">
-              <!-- Parent activity meta-data to support 4.0 and lower -->
-        <meta-data
-            android:name="android.support.PARENT_ACTIVITY"
-            android:value="com.virtusa.vravenew.VRaveMainActivity" />
+            android:label="@string/title_activity_add_new_rave"
+            android:parentActivityName="com.virtusa.vravenew.VRaveMainActivity"
+            android:screenOrientation="portrait" >
+
+            <!-- Parent activity meta-data to support 4.0 and lower -->
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.virtusa.vravenew.VRaveMainActivity" />
+        </activity>
+        <activity
+            android:screenOrientation="portrait"
+            android:name="com.virtusa.vravenew.RaveDetailActivity"
+            android:label="@string/title_activity_rave_description"
+            android:parentActivityName="com.virtusa.vravenew.VRaveMainActivity"
+            android:icon="@drawable/ic_launcher_white" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.virtusa.vravenew.VRaveMainActivity" />
         </activity>
     </application>
 

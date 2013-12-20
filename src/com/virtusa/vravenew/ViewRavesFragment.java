@@ -16,8 +16,10 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import android.app.ActionBar.LayoutParams;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -31,6 +33,7 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -74,30 +77,39 @@ public class ViewRavesFragment extends Fragment {
 		lvRaveList = (ListView) view.findViewById(R.id.listView1);
 		 SERVER_URL = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=ckdesilva&pageCount=0";
 		 new ViewRaveTask().execute();
-		 
 		lvRaveList.setOnItemClickListener(new OnItemClickListener() {
-	        public void onItemClick(AdapterView<?> adapter, View view,
+	        public void onItemClick(AdapterView<?> adapter, View childView,
 	                int position, long id) {
+	        	TextView rtitle = (TextView) childView.findViewById(R.id.ravetitle);
+	        	TextView rmessage = (TextView) childView.findViewById(R.id.raveexplanation);
+	        	TextView rperson = (TextView) childView.findViewById(R.id.raveperson);
+	        	
+	        	Intent intent = new Intent(getActivity(),RaveDetailActivity.class);
+	        	intent.putExtra("rave_title", rtitle.getText().toString());
+	        	intent.putExtra("rave_msg", rmessage.getText().toString());
+	        	intent.putExtra("rave_person", rperson.getText().toString());
+	        	startActivity(intent);
 	        	  
-                TextView rmessage = (TextView) view.findViewById(R.id.raveexplanation);
-                if(rmessage.getLineCount()==1){
-                	rmessage.setSingleLine(false);
-                	int textLength = rmessage.getText().length();
-                	if(textLength > 36){
-                	int lineCount = Math.round(textLength/36) +1 ;
-                	int height = lineCount * 30;
-                	view.getLayoutParams().height = height+85;
-                	view.requestLayout();
-					view.invalidate();
-                	}
-					
-                }
-                else{
-                	rmessage.setSingleLine(true);
-                	view.getLayoutParams().height = 100;
-					view.requestLayout();
-					view.invalidate();
-                }
+//                TextView rmessage = (TextView) childView.findViewById(R.id.raveexplanation);
+//                if(rmessage.getLineCount()==1){
+//                	rmessage.setSingleLine(false);
+//                	int textLength = rmessage.getText().length();
+//                	if(textLength > 36){
+//                		rmessage.setSingleLine(false);
+//                	int lineCount = Math.round(textLength/36) +1 ;
+//                	int height = lineCount * 30;
+//                	childView.getLayoutParams().height = height+85;
+//                	childView.requestLayout();
+//                	childView.invalidate();
+//                	}
+//					
+//                }
+//                else{
+//                	rmessage.setSingleLine(true);
+//                	childView.getLayoutParams().height = 100;
+//                	childView.requestLayout();
+//                	childView.invalidate();
+//                }
 	        }
 	    });	
 		

@@ -74,7 +74,7 @@ public class AddNewRaveActivity extends Activity {
 		setProgressBarIndeterminateVisibility(false);
 		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
 		getActionBar().setDisplayHomeAsUpEnabled(true);
-		
+		getActionBar().setTitle("RA\u2764E");
 		EditText e = (EditText)findViewById(R.id.editTextselectcategory);
 
 		actvNameSuggesion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewNameSuggesion);
@@ -165,12 +165,14 @@ public class AddNewRaveActivity extends Activity {
 	        	setProgressBarIndeterminateVisibility(true);
 	            return true;
 	        case android.R.id.home:
-	            NavUtils.navigateUpFromSameTask(this);
+	        	finish();
+	            //NavUtils.navigateUpFromSameTask(this);
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
+	
 
 	private class RaveNameSuggesionTask extends
 			AsyncTask<HashMap<String, String>, String, String> {
@@ -255,7 +257,6 @@ public class AddNewRaveActivity extends Activity {
 			wr.write(data);
 			wr.flush();
 			StringBuilder answer = new StringBuilder();
-
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
 					conn.getInputStream()));
 			String line = "";

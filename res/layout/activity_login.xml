@@ -12,7 +12,7 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="37dp"
-        android:text="RA\u2764E "
+        android:text="RA\u2764E"
         android:textColor="#FFFFFF"
         android:textSize="30sp"
         android:textStyle="bold"/>
