@@ -35,19 +35,21 @@ import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ViewRavesFragment extends Fragment {
-	
+
 	ArrayList<Integer> categoryImage = new ArrayList<Integer>();
 	ArrayList<String> raveTitle = new ArrayList<String>();
 	ArrayList<String> raveMessage = new ArrayList<String>();
 	ArrayList<String> raveSender = new ArrayList<String>();
-	
+
 	HashMap<String, String> params;
 	// keys for hash set
-	String[] from = { "cImg","rTitle", "rMessage", "rSender" };
+	String[] from = { "cImg", "rTitle", "rMessage", "rSender" };
 	// ui elements in the search suggesions
-	int[] to = { R.id.imageViewRaveImage,R.id.ravetitle, R.id.raveexplanation, R.id.raveperson };
+	int[] to = { R.id.imageViewRaveImage, R.id.ravetitle, R.id.raveexplanation,
+			R.id.raveperson };
 
 	// array list use in the adaper
 	List<HashMap<String, String>> raveList = new ArrayList<HashMap<String, String>>();
@@ -63,75 +65,89 @@ public class ViewRavesFragment extends Fragment {
 	public boolean taskReady = false;
 	boolean noNull = true;
 	ProgressBar pbLoadRaves;
+
 	@Override
-	public View onCreateView(LayoutInflater inflater,ViewGroup container, Bundle savedInstanceState){
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
 		View view;
-		view = inflater.inflate(R.layout.view_raves_fragment_layout, container,false);
-		
+		view = inflater.inflate(R.layout.view_raves_fragment_layout, container,
+				false);
+
 		pbLoadRaves = (ProgressBar) view.findViewById(R.id.progressBar1);
 		pbLoadRaves.setVisibility(View.GONE);
-		
+
 		lvRaveList = (ListView) view.findViewById(R.id.listView1);
-		 SERVER_URL = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=ckdesilva&pageCount=0";
-		 new ViewRaveTask().execute();
-		 
-		lvRaveList.setOnItemClickListener(new OnItemClickListener() {
-	        public void onItemClick(AdapterView<?> adapter, View view,
-	                int position, long id) {
-	        	  
-                TextView rmessage = (TextView) view.findViewById(R.id.raveexplanation);
-                if(rmessage.getLineCount()==1){
-                	rmessage.setSingleLine(false);
-                	int textLength = rmessage.getText().length();
-                	if(textLength > 36){
-                	int lineCount = Math.round(textLength/36) +1 ;
-                	int height = lineCount * 30;
-                	view.getLayoutParams().height = height+85;
-                	view.requestLayout();
-					view.invalidate();
-                	}
-					
-                }
-                else{
-                	rmessage.setSingleLine(true);
-                	view.getLayoutParams().height = 100;
-					view.requestLayout();
-					view.invalidate();
-                }
-	        }
-	    });	
-		
-		
-		lvRaveList.setOnScrollListener(new OnScrollListener() {
+		SERVER_URL = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=ckdesilva&pageCount=0";
+		if(!isNetworkAvailable()){
+			Toast.makeText(getActivity(), "Your internet connection is disabled", Toast.LENGTH_SHORT).show();
 			
-			@Override
-			public void onScrollStateChanged(AbsListView view, int scrollState) {
-				if(scrollState==0){
-					taskReady = true;
+		}
+		
+		new ViewRaveTask().execute();
+
+		lvRaveList.setOnItemClickListener(new OnItemClickListener() {
+			public void onItemClick(AdapterView<?> adapter, View adapterView,
+					int position, long id) {
+
+				Toast.makeText(getActivity(),Integer.toString(position), Toast.LENGTH_SHORT).show();
+				
+				TextView rmessage = (TextView) adapterView
+						.findViewById(R.id.raveexplanation);
+				if (rmessage.getLineCount() == 1) {
+					
+					int textLength = rmessage.getText().length();
+					if (textLength > 36) {
+						View childView = adapter.getChildAt(position);
+						rmessage.setSingleLine(false);
+						int lineCount = Math.round(textLength / 36) + 1;
+						int height = lineCount * 30;
+						childView.getLayoutParams().height = height + 85;
+//						view.requestLayout();
+//						view.invalidate();
+					}
+
+				} else {
+					rmessage.setSingleLine(true);
+					adapterView.getLayoutParams().height = 100;
+//					view.requestLayout();
+//					view.invalidate();
 				}
 				
 			}
-			
+		});
+
+		lvRaveList.setOnScrollListener(new OnScrollListener() {
+
+			@Override
+			public void onScrollStateChanged(AbsListView view, int scrollState) {
+				if (scrollState == 0) {
+					taskReady = true;
+				}
+
+			}
+
 			@Override
 			public void onScroll(AbsListView view, int firstVisibleItem,
 					int visibleItemCount, int totalItemCount) {
-				 if (firstVisibleItem+visibleItemCount == totalItemCount &&taskReady && noNull ) {
-					 	taskReady = false;
-						SERVER_URL_NEW = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=ckdesilva&pageCount="+counter;
-						new GetMoreRaveTask().execute();
-			        }
+				if (firstVisibleItem + visibleItemCount == totalItemCount
+						&& taskReady && noNull) {
+					taskReady = false;
+					SERVER_URL_NEW = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=ckdesilva&pageCount="
+							+ counter;
+					new GetMoreRaveTask().execute();
+				}
 			}
 		});
-		
-		
+
 		return view;
 	}
-	
-	
+
+         
+
 	private class ViewRaveTask extends AsyncTask<String, Void, Void> {
 
 		String jsonData;
-		
+
 		@Override
 		protected void onPreExecute() {
 			pbLoadRaves.setVisibility(View.VISIBLE);
@@ -163,65 +179,63 @@ public class ViewRavesFragment extends Fragment {
 				jsonData = builder.toString();
 
 				jDataArray = new JSONArray(jsonData);
-				//Log.d("JSONARRAY", jDataArray.toString());
+				// Log.d("JSONARRAY", jDataArray.toString());
 				int arrayLength = jDataArray.length();
 				for (int i = 0; i < arrayLength; i++) {
 
 					rave_KeywordId = jDataArray.getJSONObject(i)
 							.getJSONObject("Keyword").getString("KeywordId");
-					
+
 					rave_Tit = jDataArray.getJSONObject(i)
 							.getJSONObject("Keyword").getString("Tagline");
 
-					rave_Mes = jDataArray.getJSONObject(i).getString(
-							"RaveText");
+					rave_Mes = jDataArray.getJSONObject(i)
+							.getString("RaveText");
 
 					rave_Send = jDataArray.getJSONObject(i)
 							.getJSONObject("Sender").getString("FullName");
 
-
-					//keywordId.add(rave_KeywordId);
-					if(rave_KeywordId.equals("1")){
+					// keywordId.add(rave_KeywordId);
+					if (rave_KeywordId.equals("1")) {
 						categoryImage.add(R.drawable.pirl);
 					}
-					
-					else if(rave_KeywordId.equals("2")){
+
+					else if (rave_KeywordId.equals("2")) {
 						categoryImage.add(R.drawable.killer_code);
 					}
-					
+
 					else if (rave_KeywordId.equals("3")) {
 						categoryImage.add(R.drawable.eagle_eye);
 					}
-					
+
 					else if (rave_KeywordId.equals("4")) {
 						categoryImage.add(R.drawable.great_work);
 					}
-					
+
 					else if (rave_KeywordId.equals("5")) {
 						categoryImage.add(R.drawable.great_advice);
 					}
-					
+
 					else if (rave_KeywordId.equals("6")) {
 						categoryImage.add(R.drawable.great_idea);
 					}
-					
+
 					else if (rave_KeywordId.equals("7")) {
 						categoryImage.add(R.drawable.thanks_for_your_help);
 					}
-					
+
 					else if (rave_KeywordId.equals("8")) {
 						categoryImage.add(R.drawable.super_service);
 					}
-					
+
 					else if (rave_KeywordId.equals("9")) {
 						categoryImage.add(R.drawable.old_raves_default);
 					}
-					
-					
-					else{
+
+					else {
 						categoryImage.add(R.drawable.old_raves_default);
 					}
-					
+
 					raveTitle.add(rave_Tit);
 					raveMessage.add(rave_Mes);
 					raveSender.add(rave_Send);
@@ -248,8 +262,6 @@ public class ViewRavesFragment extends Fragment {
 
 		protected void onPostExecute(Void result) {
 
-			
-
 			int length = raveTitle.size();
 			for (int i = 0; i < length; i++) {
 				HashMap<String, String> rave = new HashMap<String, String>();
@@ -258,8 +270,7 @@ public class ViewRavesFragment extends Fragment {
 				rave.put("rMessage", raveMessage.get(i));
 				rave.put("rSender", raveSender.get(i));
 				raveList.add(rave);
-				
-				
+
 			}
 			adapter = new SimpleAdapter(getActivity(), raveList,
 					R.layout.list_item_view_rave, from, to);
@@ -268,14 +279,10 @@ public class ViewRavesFragment extends Fragment {
 
 		}
 	}
-	
-	
-	
-	
+
 	private class GetMoreRaveTask extends AsyncTask<String, Void, Void> {
 
 		String jsonData;
-		
 
 		protected void onPreExecute() {
 			pbLoadRaves.setVisibility(View.VISIBLE);
@@ -305,77 +312,76 @@ public class ViewRavesFragment extends Fragment {
 				}
 
 				jsonData = builder.toString();
-				if(jsonData.equals("[]")){
+				if (jsonData.equals("[]")) {
 					noNull = false;
 				}
-				
-				else{
 
-				jDataArray = new JSONArray(jsonData);
-				
-				int arrayLength = jDataArray.length();
-				raveList.clear();
-				for (int i = 0; i < arrayLength; i++) {
+				else {
 
-					rave_KeywordId = jDataArray.getJSONObject(i)
-							.getJSONObject("Keyword").getString("KeywordId");
-					
-					rave_Tit = jDataArray.getJSONObject(i)
-							.getJSONObject("Keyword").getString("Tagline");
+					jDataArray = new JSONArray(jsonData);
 
-					rave_Mes = jDataArray.getJSONObject(i).getString(
-							"RaveText");
+					int arrayLength = jDataArray.length();
+					raveList.clear();
+					for (int i = 0; i < arrayLength; i++) {
 
-					rave_Send = jDataArray.getJSONObject(i)
-							.getJSONObject("Sender").getString("FullName");
+						rave_KeywordId = jDataArray.getJSONObject(i)
+								.getJSONObject("Keyword")
+								.getString("KeywordId");
 
+						rave_Tit = jDataArray.getJSONObject(i)
+								.getJSONObject("Keyword").getString("Tagline");
 
-					if(rave_KeywordId.equals("1")){
-						categoryImage.add(R.drawable.pirl);
-					}
-					
-					else if(rave_KeywordId.equals("2")){
-						categoryImage.add(R.drawable.killer_code);
-					}
-					
-					else if (rave_KeywordId.equals("3")) {
-						categoryImage.add(R.drawable.eagle_eye);
-					}
-					
-					else if (rave_KeywordId.equals("4")) {
-						categoryImage.add(R.drawable.great_work);
-					}
-					
-					else if (rave_KeywordId.equals("5")) {
-						categoryImage.add(R.drawable.great_advice);
-					}
-					
-					else if (rave_KeywordId.equals("6")) {
-						categoryImage.add(R.drawable.great_idea);
-					}
-					
-					else if (rave_KeywordId.equals("7")) {
-						categoryImage.add(R.drawable.thanks_for_your_help);
-					}
-					
-					else if (rave_KeywordId.equals("8")) {
-						categoryImage.add(R.drawable.super_service);
-					}
-					
-					else if (rave_KeywordId.equals("9")) {
-						categoryImage.add(R.drawable.old_raves_default);
-					}
-					
-					
-					else{
-						categoryImage.add(R.drawable.old_raves_default);
-					}
-					
-					raveTitle.add(rave_Tit);
-					raveMessage.add(rave_Mes);
-					raveSender.add(rave_Send);
+						rave_Mes = jDataArray.getJSONObject(i).getString(
+								"RaveText");
 
-				}
+						rave_Send = jDataArray.getJSONObject(i)
+								.getJSONObject("Sender").getString("FullName");
+
+						if (rave_KeywordId.equals("1")) {
+							categoryImage.add(R.drawable.pirl);
+						}
+
+						else if (rave_KeywordId.equals("2")) {
+							categoryImage.add(R.drawable.killer_code);
+						}
+
+						else if (rave_KeywordId.equals("3")) {
+							categoryImage.add(R.drawable.eagle_eye);
+						}
+
+						else if (rave_KeywordId.equals("4")) {
+							categoryImage.add(R.drawable.great_work);
+						}
+
+						else if (rave_KeywordId.equals("5")) {
+							categoryImage.add(R.drawable.great_advice);
+						}
+
+						else if (rave_KeywordId.equals("6")) {
+							categoryImage.add(R.drawable.great_idea);
+						}
+
+						else if (rave_KeywordId.equals("7")) {
+							categoryImage.add(R.drawable.thanks_for_your_help);
+						}
+
+						else if (rave_KeywordId.equals("8")) {
+							categoryImage.add(R.drawable.super_service);
+						}
+
+						else if (rave_KeywordId.equals("9")) {
+							categoryImage.add(R.drawable.old_raves_default);
+						}
+
+						else {
+							categoryImage.add(R.drawable.old_raves_default);
+						}
+
+						raveTitle.add(rave_Tit);
+						raveMessage.add(rave_Mes);
+						raveSender.add(rave_Send);
+
+					}
 				}
 
 			} catch (ClientProtocolException e) {
@@ -398,29 +404,30 @@ public class ViewRavesFragment extends Fragment {
 
 		protected void onPostExecute(Void result) {
 			pbLoadRaves.setVisibility(View.GONE);
-			if(noNull==true){
+			if (noNull == true) {
 
-			int length = raveTitle.size();
-			for (int i = 0; i < length; i++) {
-				HashMap<String, String> rave = new HashMap<String, String>();
-				rave.put("cImg", Integer.toString(categoryImage.get(i)));
-				rave.put("rTitle", raveTitle.get(i));
-				rave.put("rMessage", raveMessage.get(i));
-				rave.put("rSender", raveSender.get(i));
-				raveList.add(rave);
-			}
+				int length = raveTitle.size();
+				for (int i = 0; i < length; i++) {
+					HashMap<String, String> rave = new HashMap<String, String>();
+					rave.put("cImg", Integer.toString(categoryImage.get(i)));
+					rave.put("rTitle", raveTitle.get(i));
+					rave.put("rMessage", raveMessage.get(i));
+					rave.put("rSender", raveSender.get(i));
+					raveList.add(rave);
+				}
+
 				adapter.notifyDataSetChanged();
 				taskReady = true;
-				counter ++;
+				counter++;
 			}
 		}
 	}
-	
-	 private boolean isNetworkAvailable() {
-         ConnectivityManager connectivityManager = (ConnectivityManager) getActivity()
-                         .getSystemService(Context.CONNECTIVITY_SERVICE);
-         NetworkInfo activeNetworkInfo = connectivityManager
-                         .getActiveNetworkInfo();
-         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-	 }
+
+	private boolean isNetworkAvailable() {
+		ConnectivityManager connectivityManager = (ConnectivityManager) getActivity()
+				.getSystemService(Context.CONNECTIVITY_SERVICE);
+		NetworkInfo activeNetworkInfo = connectivityManager
+				.getActiveNetworkInfo();
+		return activeNetworkInfo != null && activeNetworkInfo.isConnected();
+	}
 }
