@@ -15,8 +15,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
@@ -78,6 +80,11 @@ public class AddNewRaveActivity extends Activity {
 		
 	//	EditText e = (EditText)findViewById(R.id.editTextselectcategory);
 		LinearLayout spinner = (LinearLayout) findViewById(R.id.spinnerlayout);
+		ActionBar actionBar = getActionBar();
+		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		//actionBar.setTitle("RA\u2764E");
+//		EditText e = (EditText)findViewById(R.id.editTextselectcategory);
 
 		actvNameSuggesion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewNameSuggesion);
 		actvNameSuggesion.addTextChangedListener(new TextWatcher() {
@@ -162,17 +169,21 @@ public class AddNewRaveActivity extends Activity {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
 	        case R.id.action_settings:
+	        	Intent intent = new Intent(AddNewRaveActivity.this,SettingsActivity.class);
+	        	startActivity(intent);
 	            return true;
 	        case R.id.action_send_rave:
 	        	setProgressBarIndeterminateVisibility(true);
 	            return true;
 	        case android.R.id.home:
-	            NavUtils.navigateUpFromSameTask(this);
+	        	finish();
+	            //NavUtils.navigateUpFromSameTask(this);
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);
 	    }
 	}
+	
 
 	private class RaveNameSuggesionTask extends
 			AsyncTask<HashMap<String, String>, String, String> {
@@ -257,7 +268,6 @@ public class AddNewRaveActivity extends Activity {
 			wr.write(data);
 			wr.flush();
 			StringBuilder answer = new StringBuilder();
-
 			BufferedReader rd = new BufferedReader(new InputStreamReader(
 					conn.getInputStream()));
 			String line = "";

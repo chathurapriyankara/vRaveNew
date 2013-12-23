@@ -64,7 +64,7 @@
             android:layout_height="120dp"
             android:ems="10"
             android:gravity="top"
-            android:hint="Select a category" />
+            android:hint="Your Rave Message" />
     </LinearLayout>
 
 </LinearLayout>
