@@ -156,13 +156,13 @@ public class AddNewRaveActivity extends Activity {
          return activeNetworkInfo != null && activeNetworkInfo.isConnected();
 	 }
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		MenuInflater inflater = getMenuInflater();
-	    inflater.inflate(R.menu.add_new_rave, menu);
-	    return super.onCreateOptionsMenu(menu);
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		MenuInflater inflater = getMenuInflater();
+//	    inflater.inflate(R.menu.add_new_rave, menu);
+//	    return super.onCreateOptionsMenu(menu);
+//	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
