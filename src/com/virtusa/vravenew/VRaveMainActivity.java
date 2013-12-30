@@ -1,8 +1,10 @@
 package com.virtusa.vravenew;
 
 
+import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
@@ -10,6 +12,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
+import android.view.ViewConfiguration;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.Toast;
@@ -19,6 +22,10 @@ public class VRaveMainActivity extends FragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_vrave_main);
+		
+		ActionBar actionBar = getActionBar();
+		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
+		
 		final TabHost tabs= (TabHost) findViewById(R.id.tabhost);
 		tabs.setup();
 		
@@ -32,26 +39,26 @@ public class VRaveMainActivity extends FragmentActivity {
 		tabs.addTab(spec);
 		tabs.setCurrentTab(0);
 		
-		final ImageView ivAddNewRave = (ImageView) findViewById(R.id.imageView4);
-		ivAddNewRave.setOnTouchListener(new OnTouchListener() {
-			 
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				int clickEvent = event.getAction();
-				if(clickEvent==MotionEvent.ACTION_DOWN){
-					ivAddNewRave.setColorFilter(Color.rgb(51, 181, 229));
-					Intent intent  = new Intent(VRaveMainActivity.this,AddNewRaveActivity.class);
-					startActivity(intent);
-				}
-				
-				if(event.getAction()==MotionEvent.ACTION_UP){
-					ivAddNewRave.setColorFilter(Color.WHITE);
-				}
-				
-				
-				return true;
-			}
-		});
+//		final ImageView ivAddNewRave = (ImageView) findViewById(R.id.imageView4);
+//		ivAddNewRave.setOnTouchListener(new OnTouchListener() {
+//			 
+//			@Override
+//			public boolean onTouch(View v, MotionEvent event) {
+//				int clickEvent = event.getAction();
+//				if(clickEvent==MotionEvent.ACTION_DOWN){
+//					ivAddNewRave.setColorFilter(Color.rgb(51, 181, 229));
+//					Intent intent  = new Intent(VRaveMainActivity.this,AddNewRaveActivity.class);
+//					startActivity(intent);
+//				}
+//				
+//				if(event.getAction()==MotionEvent.ACTION_UP){
+//					ivAddNewRave.setColorFilter(Color.WHITE);
+//				}
+//				
+//				
+//				return true;
+//			}
+//		});
 	}
 
 	@Override
@@ -65,9 +72,18 @@ public class VRaveMainActivity extends FragmentActivity {
 	public boolean onOptionsItemSelected(MenuItem item) {
 	    // Handle presses on the action bar items
 	    switch (item.getItemId()) {
-	        case R.id.action_settings:
-	        	Intent settingsIntent = new Intent(VRaveMainActivity.this,SettingsActivity.class);
+	        case R.id.action_add_new_rave:
+	        	Intent settingsIntent = new Intent(VRaveMainActivity.this,AddNewRaveActivity.class);
 	        	startActivity(settingsIntent);
+	            return true;
+	        case R.id.action_help:
+	        	//
+	            return true;
+	        case R.id.action_about:
+	        	//
+	            return true;
+	        case R.id.action_logout:
+	        	//
 	            return true;
 	        default:
 	            return super.onOptionsItemSelected(item);

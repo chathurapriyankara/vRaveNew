@@ -18,8 +18,6 @@ import org.json.JSONException;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -33,7 +31,6 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.OnScrollListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
@@ -77,6 +74,9 @@ public class ViewRavesFragment extends Fragment {
 		lvRaveList = (ListView) view.findViewById(R.id.listView1);
 		 SERVER_URL = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=ckdesilva&pageCount=0";
 		 new ViewRaveTask().execute();
+		 
+		// getRaves();
+		 
 		lvRaveList.setOnItemClickListener(new OnItemClickListener() {
 	        public void onItemClick(AdapterView<?> adapter, View childView,
 	                int position, long id) {
@@ -138,6 +138,84 @@ public class ViewRavesFragment extends Fragment {
 		
 		return view;
 	}
+	
+	
+//	public void getRaves(){
+//		HashMap<String, String> rave1 = new HashMap<String, String>();
+//		rave1.put("cImg", Integer.toString(R.drawable.thanks_for_your_help));
+//		rave1.put("rTitle", "Thanks for your help");
+//		rave1.put("rMessage", "Test Rave for V+ Beta testing V+ Team");
+//		rave1.put("rSender", "Dhanushi Tennekoon");
+//		raveList.add(rave1);
+//		
+//		HashMap<String, String> rave2 = new HashMap<String, String>();
+//		rave2.put("cImg", Integer.toString(R.drawable.great_work));
+//		rave2.put("rTitle", "Good job");
+//		rave2.put("rMessage", "Thanks a lot for the help and support given to me during the tough times Chamindra. I do appreciate it very much.");
+//		rave2.put("rSender", "Sudharshan Jayawardena");
+//		raveList.add(rave2);
+//		
+//		HashMap<String, String> rave3 = new HashMap<String, String>();
+//		rave3.put("cImg", Integer.toString(R.drawable.thanks_for_your_help));
+//		rave3.put("rTitle", "Thanks for your help");
+//		rave3.put("rMessage", "Test Rave for V+ Beta testing V+ Team");
+//		rave3.put("rSender", "Dhanushi Tennekoon");
+//		raveList.add(rave3);
+//		
+//		HashMap<String, String> rave4 = new HashMap<String, String>();
+//		rave4.put("cImg", Integer.toString(R.drawable.great_advice));
+//		rave4.put("rTitle", "Thanks for your advice");
+//		rave4.put("rMessage", "Thank you for your the advice and guidance you provide to the TW team");
+//		rave4.put("rSender", "Zaneta Marcelline");
+//		raveList.add(rave4);
+//		
+//		HashMap<String, String> rave5 = new HashMap<String, String>();
+//		rave5.put("cImg", Integer.toString(R.drawable.thanks_for_your_help));
+//		rave5.put("rTitle", "Thanks for your help");
+//		rave5.put("rMessage", "Thank you very much for your support and guidance&nbsp;to make the Akura UI development work success.");
+//		rave5.put("rSender", "Upendra Haputantry");
+//		raveList.add(rave5);
+//		
+//		HashMap<String, String> rave6 = new HashMap<String, String>();
+//		rave6.put("cImg", Integer.toString(R.drawable.great_idea));
+//		rave6.put("rTitle", "Good thinking");
+//		rave6.put("rMessage", "WIsh to thank you very much fo being so supportive the many projects we have worked together on and continue to work on.. :) and sharing of great ideas taking us to the next level and being world class in what we do.&nbsp;It has been simply delightful working with you and being a part of the team.&nbsp;Cheers! Denver");
+//		rave6.put("rSender", "Denver De Zylva");
+//		raveList.add(rave6);
+//		
+//		HashMap<String, String> rave7 = new HashMap<String, String>();
+//		rave7.put("cImg", Integer.toString(R.drawable.thanks_for_your_help));
+//		rave7.put("rTitle", "Thanks for your help");
+//		rave7.put("rMessage", "thank you so much for the help given through out.");
+//		rave7.put("rSender", "Chathurika Gunawardana");
+//		raveList.add(rave7);
+//		
+//		HashMap<String, String> rave8 = new HashMap<String, String>();
+//		rave8.put("cImg", Integer.toString(R.drawable.killer_code));
+//		rave8.put("rTitle", "Awesome code");
+//		rave8.put("rMessage", "In last 2 years we were a good friends, I stucked some times with coding,each and every time you help me to find a solution. Thank you for&nbsp;helping me.");
+//		rave8.put("rSender", "Madura Harshana");
+//		raveList.add(rave8);
+//		
+//		HashMap<String, String> rave9 = new HashMap<String, String>();
+//		rave9.put("cImg", Integer.toString(R.drawable.thanks_for_your_help));
+//		rave9.put("rTitle", "Thanks for your help");
+//		rave9.put("rMessage", "For the help in Open Source Interest Group initiative on 12-12-12");
+//		rave9.put("rSender", "Ishan Abanwela");
+//		raveList.add(rave9);
+//		
+//		HashMap<String, String> rave10 = new HashMap<String, String>();
+//		rave10.put("cImg", Integer.toString(R.drawable.thanks_for_your_help));
+//		rave10.put("rTitle", "Thanks for your help");
+//		rave10.put("rMessage", "Thank you for helping me achive my best and being a good friend. :)");
+//		rave10.put("rSender", "Emmanuel Isaac");
+//		raveList.add(rave10);
+//		
+//		adapter = new SimpleAdapter(getActivity(), raveList,
+//				R.layout.list_item_view_rave, from, to);
+//		pbLoadRaves.setVisibility(View.GONE);
+//		lvRaveList.setAdapter(adapter);
+//	}
 	
 	
 	private class ViewRaveTask extends AsyncTask<String, Void, Void> {

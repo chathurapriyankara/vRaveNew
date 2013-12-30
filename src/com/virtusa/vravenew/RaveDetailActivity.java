@@ -20,7 +20,6 @@ public class RaveDetailActivity extends Activity {
 		setContentView(R.layout.activity_rave_detail);
 		ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
-		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setTitle("View Raves");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		//actionBar.setTitle("RA\u2764E");
