@@ -20,7 +20,6 @@ public class RaveDetailActivity extends Activity {
 		setContentView(R.layout.activity_rave_detail);
 		ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
-		actionBar.setDisplayHomeAsUpEnabled(true);
 		actionBar.setTitle("View Raves");
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		//actionBar.setTitle("RA\u2764E");
@@ -67,12 +66,12 @@ public class RaveDetailActivity extends Activity {
 				
 	}
 
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.rave_description, menu);
-		return true;
-	}
+//	@Override
+//	public boolean onCreateOptionsMenu(Menu menu) {
+//		// Inflate the menu; this adds items to the action bar if it is present.
+//		getMenuInflater().inflate(R.menu.rave_description, menu);
+//		return true;
+//	}
 	
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {

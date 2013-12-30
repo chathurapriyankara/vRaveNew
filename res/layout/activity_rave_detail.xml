@@ -17,13 +17,13 @@
 
      <ImageView
             android:id="@+id/imageViewRaveCatImage"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="65dp"
+            android:layout_height="65dp"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:background="@drawable/circular_img_back"
             android:scaleType="fitXY" 
-            />
+            android:padding="5dp"/>
 
         <TextView
             android:id="@+id/textViewRaveTitle"
