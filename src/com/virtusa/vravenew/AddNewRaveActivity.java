@@ -42,6 +42,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -74,11 +75,16 @@ public class AddNewRaveActivity extends Activity {
 		setContentView(R.layout.activity_add_new_rave);
 		setProgressBarIndeterminate(true);
 		setProgressBarIndeterminateVisibility(false);
+		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		
+	//	EditText e = (EditText)findViewById(R.id.editTextselectcategory);
+		LinearLayout spinner = (LinearLayout) findViewById(R.id.spinnerlayout);
 		ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		//actionBar.setTitle("RA\u2764E");
-		EditText e = (EditText)findViewById(R.id.editTextselectcategory);
+//		EditText e = (EditText)findViewById(R.id.editTextselectcategory);
 
 		actvNameSuggesion = (AutoCompleteTextView) findViewById(R.id.autoCompleteTextViewNameSuggesion);
 		actvNameSuggesion.addTextChangedListener(new TextWatcher() {
@@ -131,7 +137,7 @@ public class AddNewRaveActivity extends Activity {
 		mySpinner.setAdapter(new MyAdapter(this, R.layout.spinner_categories,
 				category));
 		//mySpinner.setVisibility(View.INVISIBLE);
-		e.setOnTouchListener(new OnTouchListener() {
+		spinner.setOnTouchListener(new OnTouchListener() {
 			
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
