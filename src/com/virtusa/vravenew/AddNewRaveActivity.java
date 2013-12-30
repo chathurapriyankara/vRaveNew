@@ -25,10 +25,8 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,9 +36,11 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
@@ -49,6 +49,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 public class AddNewRaveActivity extends Activity {
+	 int spinnerCount = 0;
 	private AutoCompleteTextView actvNameSuggesion;
 	ArrayList<String> employeeNames = new ArrayList<String>();
 	String[] from = { "txt" };
@@ -80,6 +81,10 @@ public class AddNewRaveActivity extends Activity {
 		
 	//	EditText e = (EditText)findViewById(R.id.editTextselectcategory);
 		LinearLayout spinner = (LinearLayout) findViewById(R.id.spinnerlayout);
+		final TextView spinnerCat = (TextView) findViewById(R.id.textView1);
+		final ImageView imagespinner = (ImageView) findViewById(R.id.imageView1);
+		imagespinner.setVisibility(View.GONE);
+		
 		ActionBar actionBar = getActionBar();
 		actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
 		actionBar.setDisplayHomeAsUpEnabled(true);
@@ -145,6 +150,33 @@ public class AddNewRaveActivity extends Activity {
 				return true;
 			}
 		});
+		
+		mySpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+	        public void onItemSelected(AdapterView<?> arg0, View arg1,
+	                int position, long arg3) {
+	        	
+	        	spinnerCount++;
+	        	if(spinnerCount > 1){
+	        		String text = mySpinner.getSelectedItem().toString().trim();
+	        		
+	        		spinnerCat.setText(text);
+	        		imagespinner.setVisibility(View.VISIBLE);
+	        		imagespinner.setImageResource(images[position]);
+	        	}
+	        	
+	        		
+				
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// TODO Auto-generated method stub
+			}
+			
+		});
+		
+		//mySpinner.onTouchEvent(event)
 		
 	}
 	
@@ -335,6 +367,8 @@ public class AddNewRaveActivity extends Activity {
 			return mySpinner;
 
 		}
+		
+	 
 
 	}
 
