@@ -79,7 +79,6 @@ public class AddNewRaveActivity extends Activity {
 		getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#DC8909")));
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		
-	//	EditText e = (EditText)findViewById(R.id.editTextselectcategory);
 		LinearLayout spinner = (LinearLayout) findViewById(R.id.spinnerlayout);
 		final TextView spinnerCat = (TextView) findViewById(R.id.textView1);
 		final ImageView imagespinner = (ImageView) findViewById(R.id.imageView1);
