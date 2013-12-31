@@ -14,5 +14,6 @@
     <string name="spinner">Choose a category</string>
     <string name="title_activity_rave_description">RaveDescriptionActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_activity_badge_detail">BadgeDetail</string>
 
 </resources>
