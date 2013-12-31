@@ -15,6 +15,9 @@ import org.apache.http.impl.client.DefaultHttpClient;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import com.virtusa.pulltorefreshlistview.PullToRefreshListView;
+import com.virtusa.pulltorefreshlistview.PullToRefreshListView.OnRefreshListener;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -60,6 +63,7 @@ public class ViewRavesFragment extends Fragment {
         String SERVER_URL_NEW;
         int counter = 1;
         public boolean taskReady = false;
+        public boolean listPulled = false;
         boolean noNull = true;
         ProgressBar pbLoadRaves;
         @Override
@@ -70,9 +74,25 @@ public class ViewRavesFragment extends Fragment {
                 pbLoadRaves = (ProgressBar) view.findViewById(R.id.progressBar1);
                 pbLoadRaves.setVisibility(View.GONE);
                 
-                lvRaveList = (ListView) view.findViewById(R.id.listView1);
+                lvRaveList = (PullToRefreshListView) view.findViewById(R.id.listView1);
                  SERVER_URL = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=ckdesilva&pageCount=0";
                  new ViewRaveTask().execute();
+                 
+              // Set a listener to be invoked when the list should be refreshed.
+                 // Set a listener to be invoked when the list should be refreshed.
+                 ((PullToRefreshListView) lvRaveList).setOnRefreshListener(new OnRefreshListener() {
+                	    @Override
+                	    public void onRefresh() {
+                	    	raveList.clear();
+                	    	categoryImage.clear();
+                	    	raveTitle.clear();
+                	    	raveMessage.clear();
+                	    	raveSender.clear();
+                	    	listPulled = true;
+                	    	new ViewRaveTask().execute();
+                	    }
+                	});
+                 
                 lvRaveList.setOnItemClickListener(new OnItemClickListener() {
          public void onItemClick(AdapterView<?> adapter, View childView,
          int position, long id) {
@@ -116,6 +136,7 @@ public class ViewRavesFragment extends Fragment {
                         public void onScrollStateChanged(AbsListView view, int scrollState) {
                                 if(scrollState==0){
                                         taskReady = true;
+                                        //listPulled = false;
                                 }
                                 
                         }
@@ -123,7 +144,7 @@ public class ViewRavesFragment extends Fragment {
                         @Override
                         public void onScroll(AbsListView view, int firstVisibleItem,
                                         int visibleItemCount, int totalItemCount) {
-                                 if (firstVisibleItem+visibleItemCount == totalItemCount &&taskReady && noNull ) {
+                                 if (firstVisibleItem+visibleItemCount == totalItemCount &&taskReady && noNull && !listPulled ) {
                                                  taskReady = false;
                                                 SERVER_URL_NEW = "http://ct-vnotificat.virtusa.com/vmobile/api/GetAllRaves/GetFilteredRaves?loginName=ckdesilva&pageCount="+counter;
                                                 new GetMoreRaveTask().execute();
@@ -173,6 +194,7 @@ public class ViewRavesFragment extends Fragment {
                                 jDataArray = new JSONArray(jsonData);
                                 //Log.d("JSONARRAY", jDataArray.toString());
                                 int arrayLength = jDataArray.length();
+                                
                                 for (int i = 0; i < arrayLength; i++) {
 
                                         rave_KeywordId = jDataArray.getJSONObject(i)
@@ -272,8 +294,12 @@ public class ViewRavesFragment extends Fragment {
                         adapter = new SimpleAdapter(getActivity(), raveList,
                                         R.layout.list_item_view_rave, from, to);
                         pbLoadRaves.setVisibility(View.GONE);
+                        if(listPulled){
+                        ((PullToRefreshListView) lvRaveList).onRefreshComplete();
+                        listPulled = false;
+                        }
                         lvRaveList.setAdapter(adapter);
-
+                        
                 }
         }
         
