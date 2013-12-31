@@ -14,7 +14,7 @@
     <string name="spinner">Choose a category</string>
     <string name="title_activity_rave_description">RaveDescriptionActivity</string>
     <string name="title_activity_settings">SettingsActivity</string>
-	
+	 <string name="title_activity_badge_detail">BadgeDetail</string>
     <string name="pull_to_refresh_pull_label">Pull to refresh...</string>
     <string name="pull_to_refresh_release_label">Release to refresh...</string>
     <string name="pull_to_refresh_refreshing_label">Loading...</string>
